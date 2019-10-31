@@ -13,12 +13,31 @@ import sys
 import nsfg
 import thinkstats2
 
+def ValidatePregnum(resp):
+    preg = nsfg.ReadFemPreg()
+    preg_map = nsfg.MakePregMap(preg)
+
+    for index, pregnum in resp.pregnum.iteritems():
+        caseid = resp.caseid[index]
+        indices = preg_map[caseid]
+
+        if len(indices) != pregnum:
+            return False
+
+    return True
 
 def main(script):
     """Tests the functions in this module.
 
     script: string script name
     """
+
+    resp = nsfg.ReadFemResp()
+
+    print(resp.pregnum.value_counts().sort_index())
+
+    assert(ValidatePregnum(resp))
+
     print('%s: All tests passed.' % script)
 
 
